@@ -49,22 +49,16 @@ public class DensityRulesClassifier implements BoilerpipeFilter {
     if (!it.hasNext()) {
       return false;
     }
+    
     TextBlock prevBlock = TextBlock.EMPTY_START;
     TextBlock currentBlock = it.next();
     TextBlock nextBlock = it.hasNext() ? it.next() : TextBlock.EMPTY_START;
-
     hasChanges = classify(prevBlock, currentBlock, nextBlock) | hasChanges;
 
-    if (nextBlock != TextBlock.EMPTY_START) {
-      while (it.hasNext()) {
-        prevBlock = currentBlock;
-        currentBlock = nextBlock;
-        nextBlock = it.next();
-        hasChanges = classify(prevBlock, currentBlock, nextBlock) | hasChanges;
-      }
+    while (nextBlock != TextBlock.EMPTY_START) {
       prevBlock = currentBlock;
       currentBlock = nextBlock;
-      nextBlock = TextBlock.EMPTY_START;
+      nextBlock = it.hasNext() ? it.next() : TextBlock.EMPTY_START;
       hasChanges = classify(prevBlock, currentBlock, nextBlock) | hasChanges;
     }
 
