@@ -71,6 +71,10 @@ public class DensityRulesClassifier implements BoilerpipeFilter {
     return hasChanges;
   }
 
+  /**
+   * Classifies a given TextBlock curr using a heuristic algorithm.
+   * Returns true if isContent of the TextBlock curr is changed, false otherwise.
+   */
   protected boolean classify(final TextBlock prev, final TextBlock curr, final TextBlock next) {
     final boolean isContent;
 
@@ -78,32 +82,21 @@ public class DensityRulesClassifier implements BoilerpipeFilter {
       if (prev.getLinkDensity() <= 0.555556) {
         if (curr.getTextDensity() <= 9) {
           if (next.getTextDensity() <= 10) {
-            if (prev.getTextDensity() <= 4) {
-              isContent = false;
-            } else {
-              isContent = true;
-            }
+            isContent = prev.getTextDensity() > 4;
           } else {
             isContent = true;
           }
         } else {
-          if (next.getTextDensity() == 0) {
-            isContent = false;
-          } else {
-            isContent = true;
-          }
+          isContent = next.getTextDensity() != 0;
         }
       } else {
-        if (next.getTextDensity() <= 11) {
-          isContent = false;
-        } else {
-          isContent = true;
-        }
+        isContent = next.getTextDensity() > 11;
       }
     } else {
       isContent = false;
     }
 
+    // Update isContent in curr, and return true if the value is changed.
     return curr.setIsContent(isContent);
   }
 
