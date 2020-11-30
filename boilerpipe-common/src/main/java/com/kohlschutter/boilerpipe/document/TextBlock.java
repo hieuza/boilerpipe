@@ -76,6 +76,9 @@ public class TextBlock implements Cloneable {
     return isContent;
   }
 
+  /**
+   * Updates isContent and returns true if the value is changed, false otherwise.
+   */
   public boolean setIsContent(boolean isContent) {
     if (isContent != this.isContent) {
       this.isContent = isContent;
